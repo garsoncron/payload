@@ -158,7 +158,7 @@ export const traverseFields = ({
 
       if (
         (field.unique || field.index || ['relationship', 'upload'].includes(field.type)) &&
-        !['array', 'blocks', 'group', 'point'].includes(field.type) &&
+        !['array', 'blocks', 'group'].includes(field.type) &&
         !('hasMany' in field && field.hasMany === true) &&
         !('relationTo' in field && Array.isArray(field.relationTo))
       ) {

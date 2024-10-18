@@ -285,6 +285,19 @@ export function parseParams({
                   break
                 }
 
+                if (field.type === 'point' && operator === 'near') {
+                  const [lng, lat, maxDistance, minDistance] = queryValue as number[]
+
+                  const constraint = sql`ST_DWithin(ST_SetSRID(${table[columnName]}, 4326), ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326), ${maxDistance})`
+                  if (!Number.isNaN(minDistance)) {
+                    constraint.append(
+                      sql`AND ST_Distance(${table[columnName]}, ST_SetSRID(ST_MakePoint(${lng}, ${lat}), 4326)) >= ${minDistance}`,
+                    )
+                  }
+                  constraints.push(constraint)
+                  break
+                }
+
                 constraints.push(
                   adapter.operators[queryOperator](rawColumn || table[columnName], queryValue),
                 )

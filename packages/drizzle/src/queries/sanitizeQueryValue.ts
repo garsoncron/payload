@@ -218,6 +218,12 @@ export const sanitizeQueryValue = ({
   //   )
   // }
 
+  if (operator === 'near' && field.type === 'point' && typeof formattedValue === 'string') {
+    const [lng, lat, maxDistance, minDistance] = formattedValue.split(',')
+
+    formattedValue = [Number(lng), Number(lat), Number(maxDistance), Number(minDistance)]
+  }
+
   if (operator === 'contains') {
     formattedValue = `%${formattedValue}%`
   }
